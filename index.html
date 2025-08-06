@@ -1,26 +1,152 @@
-<form id="vehicle-form">
-  <label for="vehicle-make">Make:</label>
-  <select id="vehicle-make">
-    <option>Select make</option>
-    <option>Audi</option>
-    <option>BMW</option>
-    <option>Mercedes Benz</option>
-    <option>Mini</option>
-    <option>Porsche</option>
-    <option>Volkswagen</option>
-  </select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TPN Online – Vehicle Selector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0d0d0d;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
 
-  <label for="vehicle-model">Model:</label>
-  <select id="vehicle-model">
-    <option>Select model</option>
-  </select>
+    h1 {
+      color: #00ccff;
+      font-size: 3em;
+      margin-bottom: 40px;
+    }
 
-  <label for="vehicle-year">Year:</label>
-  <select id="vehicle-year">
-    <option>Select year</option>
-  </select>
+    label {
+      font-size: 1.3em;
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
 
-  <button type="submit">Find Parts</button>
-</form>
+    select, button {
+      font-size: 1.2em;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+      width: 250px;
+      background-color: #001f33;
+      color: white;
+    }
 
-<script src="vehicle-dropdown.js"></script>
+    select:focus, button:focus {
+      outline: 2px solid #00ccff;
+    }
+
+    button {
+      background-color: #00ccff;
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0099cc;
+    }
+
+    .selector {
+      display: inline-block;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 TPN Online - Shop by Vehicle</h1>
+
+  <div class="selector">
+    <form id="vehicle-form">
+      <label for="vehicle-make">Select Make:</label>
+      <select id="vehicle-make">
+        <option>Select make</option>
+        <option>Audi</option>
+        <option>BMW</option>
+        <option>Mercedes Benz</option>
+        <option>Mini</option>
+        <option>Porsche</option>
+        <option>Volkswagen</option>
+      </select>
+
+      <label for="vehicle-model">Select Model:</label>
+      <select id="vehicle-model">
+        <option>Select model</option>
+      </select>
+
+      <label for="vehicle-year">Select Year:</label>
+      <select id="vehicle-year">
+        <option>Select year</option>
+      </select>
+
+      <button type="submit">🔍 Find Parts</button>
+    </form>
+  </div>
+
+  <script>
+    const vehicleData = {
+      Audi: {
+        "A3": [2020, 2021, 2022],
+        "A4": [2019, 2020, 2021],
+        "Q5": [2021, 2022],
+      },
+      BMW: {
+        "3 Series": [2018, 2019, 2020],
+        "5 Series": [2020, 2021, 2022],
+        "X5": [2021, 2022],
+      },
+      "Mercedes Benz": {
+        "C-Class": [2019, 2020, 2021],
+        "E-Class": [2020, 2021],
+        "GLA": [2021],
+      },
+      Mini: {
+        "Cooper": [2018, 2019, 2020],
+        "Countryman": [2020, 2021],
+      },
+      Porsche: {
+        "Cayenne": [2019, 2020],
+        "911": [2021, 2022],
+      },
+      Volkswagen: {
+        "Golf": [2019, 2020, 2021],
+        "Polo": [2020, 2021],
+        "Tiguan": [2021],
+      }
+    };
+
+    const makeSelect = document.getElementById("vehicle-make");
+    const modelSelect = document.getElementById("vehicle-model");
+    const yearSelect = document.getElementById("vehicle-year");
+
+    makeSelect.addEventListener("change", () => {
+      const models = vehicleData[makeSelect.value] || {};
+      modelSelect.innerHTML = "<option>Select model</option>";
+      yearSelect.innerHTML = "<option>Select year</option>";
+      Object.keys(models).forEach(model => {
+        modelSelect.add(new Option(model, model));
+      });
+    });
+
+    modelSelect.addEventListener("change", () => {
+      const years = vehicleData[makeSelect.value][modelSelect.value] || [];
+      yearSelect.innerHTML = "<option>Select year</option>";
+      years.forEach(y => yearSelect.add(new Option(y, y)));
+    });
+
+    document.getElementById("vehicle-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const selectedMake = makeSelect.value.toLowerCase().replace(/\s/g, "-");
+      if (!selectedMake || selectedMake === "select make") return alert("Please select a make");
+
+      // 👇 Redirect to Google Sites page for the vehicle
+      window.location.href = `https://sites.google.com/view/tpn-online/${selectedMake}`;
+    });
+  </script>
+</body>
+</html>
